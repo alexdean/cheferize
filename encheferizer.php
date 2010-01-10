@@ -64,6 +64,8 @@ class encheferizer
             $char = substr($word, $i, 1);
             $isLast = ($i == strlen($word) - 1) ? true : false;   
             $iSeen = false;
+            
+            // rules for these letters beginning a word
             if($i == 0){ 
                 switch($char){
                 case "e":
@@ -87,7 +89,8 @@ class encheferizer
                     continue 2;
                     break;
                 }
-                
+            
+            // rules for these letters not beginning a word
             } else {
                 if($char == "e"){
                     if(!$isLast && substr($word, $i + 1, 1) == "w"){
@@ -105,7 +108,9 @@ class encheferizer
                     $newword .= "ff"; 
                     $i++;
                     continue;
+                // ir->ur, or i->ee if no i has occurred.
                 } elseif($char == "i"){
+                    
                     if(!$isLast && substr($word, $i + 1, 1) == "r"){
                         $newword .= "ur";
                         $i+=2;
@@ -117,6 +122,7 @@ class encheferizer
                         $iSeen = true;
                         continue;
                     }
+                // 'ow->oo' or 'o->u'
                 } elseif($char == "o"){
                     if(!$isLast && substr($word, $i + 1, 1) == "w"){
                         $newword .= "oo";
@@ -142,6 +148,8 @@ class encheferizer
                     continue;
                 }
             } // En of In-word rules
+            
+            
             // Things that may be replaced anywhere
             if($char == "A"){
                 if(!$isLast && substr($word, $i+1, 1) == "n"){
