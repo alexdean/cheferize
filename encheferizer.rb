@@ -60,10 +60,28 @@ module Cheferize
       
       # write one of these to implement every rule.
       # main loop calls each in turn.
-      # first to return content wins.
-      def rule( subject, first, last, seen_i )
+      # first to return true wins.
+      #   must return some information about how many characters to consume
+      #   must return a fragment to add to the translated string
+      #   set properties rather than return stuff?
+      def rule( subject, is_first, is_last, seen_i )
         
       end
+      
+      def beginning_e
+      end
+      
+      def beginning_o
+      end
+      
+      def ew_oo
+        return if is_first
+        'oo' if subject[ 0..1 ] == 'ew'
+      end
+      
+      def ending_in_e
+      end
+      
       
   end
   
