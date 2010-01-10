@@ -24,18 +24,23 @@ class encheferizer
         $delimiters = " \n\t\\,<.>/?;:'\"[{]}|=+-_!@#$%^&*()~`";
         $newline = "";
         $word = "";
+        
         for($i = 0; $i < strlen($string); $i++){
             $s = substr($string, $i, 1);
-                                      
+            
+            // if this character is not a delimiter, accumulate it into $word
             if(($position = strstr($delimiters, $s)) === false){ 
 
                 $word .= $s;
   
+            // when a delimiter is found
              } else {
+               // encheferize a non-empty $word and add to $newline
                 if(!empty($word)){
                     $newline .= $this->encheferizeWord($word);
                     $word = "";
                 }
+                // if . or !, randomly borkify
                 if($s == "." || $s == "!"){
                     if(rand(0,3) == 1){  
                         $newline .= ", Bork Bork Bork!";
@@ -43,6 +48,7 @@ class encheferizer
                     } else {
                         $newline .= ".";
                     }
+                // pass other delimiters through unchanged
                 } else {
                     $newline .= $s;
                 }
@@ -92,6 +98,8 @@ class encheferizer
             
             // rules for these letters not beginning a word
             } else {
+                // ew->oo
+                // e$->e-a
                 if($char == "e"){
                     if(!$isLast && substr($word, $i + 1, 1) == "w"){
                         $newword .= 'oo';
@@ -103,12 +111,12 @@ class encheferizer
                         $i++;
                         continue;
                     }
-                    
+                // f->ff
                 } elseif($char == "f"){
                     $newword .= "ff"; 
                     $i++;
                     continue;
-                // ir->ur, or i->ee if no i has occurred.
+                // ir->ur or i->ee if no i has occurred.
                 } elseif($char == "i"){
                     
                     if(!$isLast && substr($word, $i + 1, 1) == "r"){
@@ -122,7 +130,7 @@ class encheferizer
                         $iSeen = true;
                         continue;
                     }
-                // 'ow->oo' or 'o->u'
+                // ow->oo or o->u
                 } elseif($char == "o"){
                     if(!$isLast && substr($word, $i + 1, 1) == "w"){
                         $newword .= "oo";
@@ -133,11 +141,13 @@ class encheferizer
                         $i++;
                         continue;
                     }
+                // tion -> shun
                 } elseif($i <= strlen($word - 4) && $char == "t" && substr($word, $i + 1, 1) == "i" 
                             && substr($word, $i + 2, 1) == "o" && substr($word, $i + 3, 1) == "n"){  // Caption -> Capshun
                     $newword .= "shun";
                     $i += 4;
                     continue;
+                // u->oo
                 } elseif($char == "u"){
                     $newword .= "oo";
                     $i++;
@@ -151,15 +161,19 @@ class encheferizer
             
             
             // Things that may be replaced anywhere
+            
             if($char == "A"){
+                // An->Un
                 if(!$isLast && substr($word, $i+1, 1) == "n"){
                     $newword .= "Un";
                     $i+=2;
                     continue;
+                // Au->Oo
                 } elseif(!$isLast && substr($word, $i+1, 1) == "u"){
                     $newword .= "Oo";
                     $i+=2;
                     continue;
+                // A.->E
                 } elseif(!$isLast){
                     $newword .= "E";
                     $i++;
@@ -179,20 +193,28 @@ class encheferizer
                     $i++;
                     continue;
                 } 
+            
+            
+            
             } elseif($char == "e"){
+                // en$->ee
                 if(!$isLast && substr($word, $i+1, 1) == "n" && $i == strlen($word) - 2){
                     $newword .= "ee";
                     $i+=2;
                     continue;
+                // can this ever occur?
                 } elseif ($i > 0){
                     // Do nothing
                     
                 }
             } elseif($char == "t"){
+              
+                // th->tt
                 if($i == strlen($word) -2 && substr($word, $i+1, $i) == "h"){
                     $newword .= "t";
                     $i+=2;
                     continue;
+                // the->zee
                 } elseif($i <= strlen($word) - 3 && substr($word, $i+1, 1) == "h" && substr($word, $i+2, 1) == "e"){
                     $newword .= "zee";
                     $i+=3;
@@ -203,7 +225,7 @@ class encheferizer
                 $newword .= "Zee";
                 $i +=3;
                 continue;
-                
+            // v->f
             } elseif($char == "v"){
                 $newword .= "f";
                 $i++;
@@ -212,6 +234,7 @@ class encheferizer
                 $newword .= "F";
                 $i++;
                 continue;
+            // w->v
             } elseif($char == "w"){
                 $newword .= "v";
                 $i++;
