@@ -28,25 +28,32 @@ end
 
 module Cheferize
   
-  def to_chef
+  class << self
+    def rule( name, &block )
+      @rules ||= []
+      sym = name.to_sym
+      @rules << sym
+      define_method( sym, block )
+    end
     
+    def rules
+      @rules
+    end
+  end
+  
+  def to_chef
     # split string into words
+    # TODO : punctuation will break rules which assert :last position.
     output = to_s.split( ' ' ).map do |word|
       cheferize( word )
     end
     output = output.join( ' ' )
     
-    # randomly borkify after . or !
+    # TODO : randomly borkify after . or !
     
   end
   
   def cheferize( input )
-    
-    rules = [ :pass_the_bork, :beginning_e, :beginning_o, :interior_ew_to_oo, :final_e_to_ea, :interior_f_to_ff, :interior_i, 
-      :interior_o, :tion_to_shun, :interior_u, :an_to_un, :au_to_oo, :non_final_a_to_e, :final_en_to_ee, :the_to_zee,
-      :th_to_t, :v_to_f, :w_to_v, :pass ]
-    
-    
     
     i=0
     output = ''
@@ -61,10 +68,10 @@ module Cheferize
       end
       
       # apply rules to each character, breaking on the first one which returns output
-      rules.each do |rule|
+      # for the word 'testify', the rules will see 'testify', 'estify', 'stify', 'tify', etc...
+      Cheferize.rules.each do |rule|
         subject = input[ (i..input.size) ]
         out = self.send( rule, subject, position )
-        #puts "#{i} #{subject} #{rule} returns #{out.inspect}"
         if out
           output += out[ 0 ]
           i += out[ 1 ]
@@ -104,43 +111,42 @@ module Cheferize
     # w->v
     # pass
   
-  def pass_the_bork( subject, position )
-    return subject if position == :first && subject[ 0,4 ].downcase == 'bork'
+  # no recursive cheferizing yet.
+  rule "pass the bork" do |subject, position|
+    [ subject, 4 ] if position == :first && subject[ 0,4 ].downcase == 'bork'
   end
   
   # ^e->i
-  def beginning_e( subject, position )
-    if position == :first
-      return [ 'i', 1 ] if subject[ 0,1 ] == 'e'
-      return [ 'I', 1 ] if subject[ 0,1 ] == 'E'
+  rule "initial e becomes i" do |subject, position|
+    if position == :first && subject[ 0,1 ].downcase == 'e'
+      [ 'i'.in_same_case_as( subject[ 0,1 ] ), 1 ]
     end
   end
   
   # ^o->oo
-  def beginning_o( subject, position )
-    if position == :first
-      return [ 'oo', 1 ] if subject[ 0,1 ] == 'o'
-      return [ 'Oo', 1 ] if subject[ 0,1 ] == 'O'
+  rule "initial o becomes oo" do |subject, position|
+    if position == :first && subject[ 0,1 ].downcase == 'o'
+      [ 'o'.in_same_case_as( subject[ 0,1 ] ) + 'o', 1 ]
     end
   end
   
   # ew->oo, if not at the beginning
-  def interior_ew_to_oo( subject, position )
+  rule "interior ew becomes oo" do |subject, position|
     [ 'oo', 2 ] if position != :first && subject[ 0,2 ] == 'ew'
   end
   
   # e$->e-a, if at the end
-  def final_e_to_ea( subject, position )
+  rule "final e becomes e-a" do |subject, position|
     [ 'e-a', 1 ] if position == :last && subject[ 0,1 ] == 'e'
   end
   
   # f->ff if not at the beginning
-  def interior_f_to_ff( subject, position )
+  rule "interior f becomes ff" do |subject, position|
     [ 'ff', 1 ] if position != :first && subject[ 0,1 ] == 'f'
   end
   
   # ir->ur, or i->ee if no i has occurred.
-  def interior_i( subject, position )
+  rule "interior ir becomes ur, or first-occurring interior i becomes ee" do |subject, position|
     if position != :first
       if subject[ 0,2 ] == 'ir'
         [ 'ur', 2 ]
@@ -152,7 +158,7 @@ module Cheferize
   end
   
   # ow->oo or o->u
-  def interior_o( subject, position )
+  rule "ow becomes oo, or o becomes u" do |subject, position|
     if position != :first
       if subject[ 0,2 ] == 'ow'
         [ 'oo', 2 ]
@@ -163,42 +169,42 @@ module Cheferize
   end
   
   # tion -> shun
-  def tion_to_shun( subject, position )
+  rule "tion becomes shun" do |subject, position|
     if position != :first && subject[ 0,4 ] == 'tion'
       [ 'shun', 4 ]
     end
   end
   
   # u->oo
-  def interior_u( subject, position )
+  rule "interior u becomes oo" do |subject, position|
     if position != :first && subject[ 0,1 ] == 'u'
       [ 'oo', 1 ]
     end
   end
   
   # An->Un, an->un
-  def an_to_un( subject, position )
+  rule "an becomes un" do |subject, position|
     if subject[ 0,2 ].downcase == 'an'
-      [ 'u'.in_same_case_as( subject[ 0,1] ) + 'n', 2 ]
+      [ 'u'.in_same_case_as( subject[ 0,1 ] ) + 'n', 2 ]
     end
   end
   
   # Au->Oo, au->oo
-  def au_to_oo( subject, position )
+  rule "au becomes oo" do |subject, position|
     if subject[ 0,2 ].downcase == 'au'
-      [ 'o'.in_same_case_as( subject[ 0,1] ) + 'o', 2 ]
+      [ 'o'.in_same_case_as( subject[ 0,1 ] ) + 'o', 2 ]
     end
   end
   
   # A.->E (A not at the end becomes E)
-  def non_final_a_to_e( subject, position )
+  rule "non-final a becomes e" do |subject, position|
     if position != :last && subject[ 0,1 ].downcase == 'a'
-      [ 'e'.in_same_case_as( subject[ 0,1] ), 1 ]
+      [ 'e'.in_same_case_as( subject[ 0,1 ] ), 1 ]
     end
   end
   
   # en$->ee
-  def final_en_to_ee( subject, position )
+  rule "final en becomes ee" do |subject, position|
     if position != :first && subject == 'en'
       [ 'ee', 2 ]
     end
@@ -207,34 +213,34 @@ module Cheferize
   # e not at the beginning, do nothing. Pointless?
   
   # the->zee
-  def the_to_zee( subject, position )
+  rule "the becomes zee" do |subject, position|
     if subject[ 0,3 ].downcase == 'the'
-      [ 'z'.in_same_case_as( subject[ 0,1] ) + 'ee', 3 ]
+      [ 'z'.in_same_case_as( subject[ 0,1 ] ) + 'ee', 3 ]
     end
   end
   
   # th->t
-  def th_to_t( subject, position )
+  rule "th becomes t" do |subject, position|
     if subject[ 0,2 ].downcase == 'th'
-      [ 't'.in_same_case_as( subject[ 0,1] ), 2 ]
+      [ 't'.in_same_case_as( subject[ 0,1 ] ), 2 ]
     end
   end
   
   # v->f
-  def v_to_f( subject, position )
+  rule "v becomes f" do |subject, position|
     if subject[ 0,1 ].downcase == 'v'
-      [ 'f'.in_same_case_as( subject[ 0,1] ), 1 ]
+      [ 'f'.in_same_case_as( subject[ 0,1 ] ), 1 ]
     end
   end
   
   # w->v
-  def w_to_v( subject, position )
+  rule "w becomes v" do |subject, position|
     if subject[ 0,1 ].downcase == 'w'
-      [ 'v'.in_same_case_as( subject[ 0,1] ), 1 ]
+      [ 'v'.in_same_case_as( subject[ 0,1 ] ), 1 ]
     end
   end
   
-  def pass( subject, position )
+  rule "pass on anything else" do |subject, position|
     [ subject[ 0,1 ], 1 ]
   end
   
