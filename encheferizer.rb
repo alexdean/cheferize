@@ -26,6 +26,15 @@ class String
   end
 end
 
+# class String
+#   include Cheferize
+# end
+# 
+# >> "This is a test!".to_chef
+# => "Tees is e test!"
+#
+# Cheferize.rules shows you the transliteration rules.
+# These are applied sequentially to each character in the source string until 1 matches.
 module Cheferize
   
   class << self
@@ -57,13 +66,14 @@ module Cheferize
     
     i=0
     output = ''
+    # see rule "interior ir becomes ur, or first-occurring interior i becomes ee"
     @chef_saw_an_i = nil
     
     while i < input.size do
       position = nil
       if i == 0
         position = :first
-      elsif i == input.size
+      elsif i == ( input.size - 1 )
         position = :last
       end
       
@@ -72,6 +82,7 @@ module Cheferize
       Cheferize.rules.each do |rule|
         subject = input[ (i..input.size) ]
         out = self.send( rule, subject, position )
+        puts "#{subject} : '#{rule.to_s}' returns '#{out.inspect}', #{position.to_s}"
         if out
           output += out[ 0 ]
           i += out[ 1 ]
@@ -114,6 +125,12 @@ module Cheferize
   # no recursive cheferizing yet.
   rule "pass the bork" do |subject, position|
     [ subject, 4 ] if position == :first && subject[ 0,4 ].downcase == 'bork'
+  end
+  
+  rule "randomly borkify after . or !" do |subject, position|
+    if position == :last && ( subject[ 0,1 ] == '.' || subject[ 0,1 ] == '!' ) && rand( 3 ) == 0
+      [ ', bork bork bork!', 1 ]
+    end
   end
   
   # ^e->i
