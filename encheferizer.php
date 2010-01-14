@@ -209,7 +209,7 @@ class encheferizer
                 }
             } elseif($char == "t"){
               
-                // th->tt
+                // th->t
                 if($i == strlen($word) -2 && substr($word, $i+1, $i) == "h"){
                     $newword .= "t";
                     $i+=2;
