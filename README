@@ -1,0 +1,27 @@
+Cheferize : A Ruby library to 'translate' strings into Swedish Chef.
+Copyright 2010 by Alex Dean.
+
+Usage:
+>> class String; include Cheferize; end 
+>> "This is a test!".to_chef
+=> "Tees is e test, bork bork bork!"
+
+Cheferize is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+Cheferize is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Cheferize; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+
+Inspired by encheferizer.php by eamelink (Erik Bakker).
+About encheferizer.php :
+  http://bork.eamelink.nl (defunct as of 17 Jan 2010)
+  Based on the original chef.x from John Hagerman.
+  More info about the original chef.x : http://tbrowne.best.vwh.net/chef/ (also defunct as of 17 Jan 2010)
