@@ -1,15 +1,38 @@
-# Usage:
-# Cheferize can be included into any class which responds to to_s.  
-# It adds a method to_chef.
-# class String
-#   include Cheferize
-# end
+# Cheferize : A Ruby library to 'translate' strings into Swedish Chef.
+# Copyright 2010 by Alex Dean <alex@crackpot.org>.
 # 
+# Usage:
+# >> class String; include Cheferize; end 
 # >> "This is a test!".to_chef
-# => "Tees is e test!"
+# => "Tees is e test, bork bork bork!"
+# 
+# Cheferize is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+# 
+# Cheferize is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with Cheferize; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
-# These are applied sequentially to each character in the source string until 1 matches.
+# Inspired by encheferizer.php by eamelink (Erik Bakker).
+# About encheferizer.php :
+#   http://bork.eamelink.nl (defunct as of 17 Jan 2010)
+#   Based on the original chef.x from John Hagerman.
+#   More info about the original chef.x : http://tbrowne.best.vwh.net/chef/ (also defunct as of 17 Jan 2010)
+# 
 module Cheferize
+  
+  def self.included( other )
+    if ! other.respond_to? :to_ss
+      raise "#{other} cannot include Cheferize.  #{other} does not respond to to_s."
+    end
+  end
   
   def to_chef
     # split string into words
@@ -57,8 +80,22 @@ module Cheferize
   
   # General rules
   # after a replacement occurs, skip to the next source character.  (only 1 transformation per letter)
-  # if a multi-char test matches, skip over to the next chars. 'few' matches 'ew->oo'.  Then we're done.
+  # if a multi-character test matches, skip over to the next chars. 
+  # Rule API :
+  #  Each rule must accept parameters:
+  #    - subject : a string to consider for transformation
+  #    - position : a symbol indicating where the beginning of the subject string falls, in relationship
+  #                 to the entire word being transformed.  Value will be :first, :last, or nil.
+  #  A rule may return either:
+  #    - nil : Meaning this rule does not apply.
+  #    - A array with element 0 containing a replacement string, and element 1 containing an integer describing the
+  #      number of characters this match consumes in the entire word being transformed.
+  #      Example : The string 'ew' is changed to 'oo' by the rule 'interior ew becomes oo'.  Because this match
+  #                involves both the 'e' and the 'w', it consumes both characters.  The 'w' will not be considered
+  #                for matching on its own.
+  #
   
+  # Outline of rules.  Taken from encheferizer.php by Erik Bakker.
   # for first char
     # ^e->i
     # ^o->oo
