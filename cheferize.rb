@@ -29,7 +29,7 @@
 module Cheferize
   
   def self.included( other )
-    if ! other.respond_to? :to_ss
+    if ! other.respond_to? :to_s
       raise "#{other} cannot include Cheferize.  #{other} does not respond to to_s."
     end
   end
