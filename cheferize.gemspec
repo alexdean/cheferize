@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["github@mostlyalex.com"]
 
   spec.summary       = %q{Transliterate strings into Swedish Chef.}
-  spec.homepage      = "https://github.com/alexdean/cheferize."
+  spec.homepage      = "https://github.com/alexdean/cheferize"
 
   spec.required_ruby_version = '>= 2.3', '<= 2.7'
 
