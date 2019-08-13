@@ -24,6 +24,9 @@ About encheferizer.php :
   Based on the original chef.x from John Hagerman.
   More info about the original chef.x : http://tbrowne.best.vwh.net/chef/ (also defunct as of 17 Jan 2010)
 
+## Build Status
+
+[![Build Status](https://travis-ci.org/alexdean/cheferize.svg?branch=master)](https://travis-ci.org/alexdean/cheferize)
 
 ## Installation
 
