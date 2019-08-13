@@ -1,28 +1,16 @@
 # Cheferize
 
-Cheferize : A Ruby library to 'translate' strings into Swedish Chef.
-Copyright 2010 by Alex Dean.
+Cheferize is a Ruby gem which 'translates' strings into Swedish Chef.
 
-Cheffereeze-a is free-a sufftvere; yuoo cun redeestriboote-a it und/ur mudeeffy
-it under zee terms ooff zee GNU Generel Poobleec Leecense-a es poobleeshed by
-zee Free-a Sufftvere-a Fuoondeshun; ieezeer ferseeun 2 ooff zee Leecense, oor
-(et yuoor oopshun) uny leter ferseeun.
-
-Cheffereeze-a is deestribooted in zee hupe-a tet it veell be-a useffool,
-boot VITOUT UnY VERRUnTY; veetuoot ifee zee impleeed verrunty ooff
-MERCHUnTEBILITY oor FITNESS FOR E PERTICULER PURPOSE. See-a zee
-GNU Generel Poobleec Leecense-a fur mure-a deteeels.
-
-Yuoo shuoold hefe-a receeefed e cupy ooff zee GNU Generel Poobleec Leecense-a
-elung veet Cheffereeze; iff nut, vreete-a tu zee Free-a Sufftvere-a
-Fuoondeshun, Inc., 51 Frunkleen St, Feefft Fluur, Bustun, MA 02110-1301 USA
+## Inspiration / Prior Art
 
 Inspired by encheferizer.php by eamelink (Erik Bakker).
 
-About encheferizer.php :
-  http://bork.eamelink.nl (defunct as of 17 Jan 2010)
-  Based on the original chef.x from John Hagerman.
-  More info about the original chef.x : http://tbrowne.best.vwh.net/chef/ (also defunct as of 17 Jan 2010)
+About encheferizer.php
+
+  * http://bork.eamelink.nl (defunct as of 17 Jan 2010)
+  * Based on the original chef.x from John Hagerman.
+  * More info about the original chef.x : http://tbrowne.best.vwh.net/chef/ (also defunct as of 17 Jan 2010)
 
 ## Build Status
 
@@ -51,6 +39,22 @@ Or install it yourself as:
 >> "This is a test!".to_chef
 => "Tees is e test, bork bork bork!"
 ```
+
+## License
+
+Cheffereeze-a is free-a sufftvere; yuoo cun redeestriboote-a it und/ur mudeeffy
+it under zee terms ooff zee GNU Generel Poobleec Leecense-a es poobleeshed by
+zee Free-a Sufftvere-a Fuoondeshun; ieezeer ferseeun 2 ooff zee Leecense, oor
+(et yuoor oopshun) uny leter ferseeun.
+
+Cheffereeze-a is deestribooted in zee hupe-a tet it veell be-a useffool,
+boot VITOUT UnY VERRUnTY; veetuoot ifee zee impleeed verrunty ooff
+MERCHUnTEBILITY oor FITNESS FOR E PERTICULER PURPOSE. See-a zee
+GNU Generel Poobleec Leecense-a fur mure-a deteeels.
+
+Yuoo shuoold hefe-a receeefed e cupy ooff zee GNU Generel Poobleec Leecense-a
+elung veet Cheffereeze; iff nut, vreete-a tu zee Free-a Sufftvere-a
+Fuoondeshun, Inc., 51 Frunkleen St, Feefft Fluur, Bustun, MA 02110-1301 USA
 
 ## Contributing
 
