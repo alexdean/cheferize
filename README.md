@@ -14,7 +14,7 @@ About encheferizer.php
 
 ## Build Status
 
-[![Build Status](https://travis-ci.org/alexdean/cheferize.svg?branch=master)](https://travis-ci.org/alexdean/cheferize)
+[![Test Suite](https://github.com/alexdean/cheferize/actions/workflows/rspec.yml/badge.svg)](https://github.com/alexdean/cheferize/actions/workflows/rspec.yml)
 
 ## Installation
 
